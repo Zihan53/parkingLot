@@ -1,5 +1,6 @@
 package model;
 
+// Represents a vehicle having a car license, parking fee receivable, statuses and locations.
 public class Vehicle {
 
     public static final int SIZE_X = 16;

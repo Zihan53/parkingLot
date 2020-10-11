@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+// Represents a parking lot having a list of spaces, list of vehicles and balance (in dollars)
 public class ParkingLot {
 
     private static final int PUNISHMENT_AMOUNT = 10;

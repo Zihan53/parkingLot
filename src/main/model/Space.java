@@ -1,5 +1,6 @@
 package model;
 
+// Represents a space having a number, boundaries and status.
 public class Space {
 
     private Boolean isVacancy;
