@@ -12,11 +12,9 @@ I am currently in a job about teaching kids programming. In the process of work,
 knowledge through games. So, I come up with this idea and hope kids can try simple business in this application.
  
 ## User Stories
-- As a user, I want to be able to add new vehicles to the parking lot system
+- As a user, I want to be able to add new vehicles to the parking lot.
 - As a user, I want to be able to assign vehicles to vacant spaces and remove the assignments.
 - As a user, I want to be able to view an existing vehicle's information.
-- As a user, I hope the system can periodically and randomly select a car from existing vehicles to be ready to 
-move out.
-- As a user, I hope there will be an addition in my balance once I serve a vehicle successfully and subtraction once I
-fail to response to a vehicle's requirement.
+- As a user, I want to be able to get a notification once there is some change in my balance and view my balance
+whenever I want.
 
