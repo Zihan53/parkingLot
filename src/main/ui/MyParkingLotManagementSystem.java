@@ -16,20 +16,21 @@ public class MyParkingLotManagementSystem {
     private Scanner input;
     private boolean keepGoing;
 
-
+    // EFFECTS: runs the management system
     public MyParkingLotManagementSystem() {
         runSystem();
     }
 
+    // MODIFIES: this
+    // EFFECTS: process user input
     private void runSystem() {
         String command;
         init();
-
         while (keepGoing) {
             displayMenu();
             while (true) {
-                command = input.next();
-                command.toLowerCase();
+                command = input.next();      // use the code in
+                command.toLowerCase();       // TellerApp
                 if (DEFAULT_COMMAND.contains(command) && command.length() == 1) {
                     break;
                 } else {
@@ -40,7 +41,8 @@ public class MyParkingLotManagementSystem {
         }
     }
 
-
+    // MODIFIES: this
+    // EFFECTS: initializes parking lot and generate SPACES_NUM spaces.
     private void init() {
         myParkingLot = new ParkingLot();
         input = new Scanner(System.in);
@@ -66,14 +68,14 @@ public class MyParkingLotManagementSystem {
         System.out.println("\tq -> quit");
     }
 
-    // REQUIRES: command must be one of g, c, v, q;
+    // REQUIRES: command must be one of a, g, c, v, q;
     // MODIFIES: this
     // EFFECTS: processes user command
     private void processCommand(String command) {
         if (command.equals("a")) {
             addNewVehicle();
         } else if (command.equals("r")) {
-            removeCurrentVehicle();
+            removeExistingVehicle();
         } else if (command.equals("c")) {
             checkInformationOfVehicle();
         } else if (command.equals("v")) {
@@ -85,6 +87,8 @@ public class MyParkingLotManagementSystem {
     }
 
 
+    // MODIFIES: this
+    // EFFECTS: Add a new vehicle and assign vehicle to a vacant space.
     private void addNewVehicle() {
         String command;
         if (myParkingLot.checkNoVacantSpace()) {
@@ -111,7 +115,9 @@ public class MyParkingLotManagementSystem {
         }
     }
 
-    private void removeCurrentVehicle() {
+    // MODIFIES: this
+    // EFFECTS: Remove a vehicle from the parking lot.
+    private void removeExistingVehicle() {
         String command;
         if (myParkingLot.getSizeVehicles() == 0) {
             System.out.println("There is no vehicle in your parking lot");
@@ -135,6 +141,7 @@ public class MyParkingLotManagementSystem {
     }
 
 
+    // EFFECTS: View an existing vehicle's information.
     private void checkInformationOfVehicle() {
         String command;
         if (myParkingLot.getSizeVehicles() == 0) {
@@ -155,6 +162,7 @@ public class MyParkingLotManagementSystem {
         }
     }
 
+    // EFFECTS: View current balance.
     private void viewBalance() {
         System.out.println("Your current balance is $" + myParkingLot.getBalance());
     }
