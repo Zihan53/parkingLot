@@ -16,6 +16,7 @@ public class Space {
     //          and assign four boundaries to each corresponding variables
     public Space(int num, int ub, int lob, int leb, int rb) {
         isVacancy = true;
+        carLicense = "";
         this.num = num;
         upperBoundary = ub;
         lowerBoundary = lob;
@@ -23,7 +24,8 @@ public class Space {
         rightBoundary = rb;
     }
 
-    //EFFECTS: Set isVacancy to be iv.
+    // MODIFIES: this
+    // EFFECTS: Set isVacancy to be iv.
     public void setIsVacancy(Boolean iv) {
         isVacancy = iv;
     }

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 // Represents a parking lot having a list of spaces, list of vehicles and balance (in dollars)
 public class ParkingLot {
 
-    private static final int PUNISHMENT_AMOUNT = 10;
-
     private ArrayList<Space> spaces;
     private ArrayList<Vehicle> vehicles;
     private int balance;
@@ -25,14 +23,18 @@ public class ParkingLot {
     }
 
     // MODIFIES: this
-    // EFFECTS: ADD v to vehicles.
+    // EFFECTS: Add v to vehicles.
     public void addVehicle(Vehicle v) {
         vehicles.add(v);
     }
 
-    // EFFECTS: Make vehicle with carLicense cl assigned to space with spaceNum sn.
-    public void parkInVehicle(Vehicle v, Space s) {
-        v.assignToSpace(s);
+    // REQUIRE: There must be a vehicle with carLicense cl in vehicles.
+    // MODIFIES: this
+    // EFFECTS: Remove the vehicle with carLicense cl from vehicles.
+    public void removeVehicle(String cl) {
+        Vehicle v = searchVehicle(cl);
+        vehicles.remove(v);
+        v.removeFromSpace(searchSpace(v.getPlaceNum()));
     }
 
     // REQUIRES: Spaces can not be empty.
@@ -57,6 +59,35 @@ public class ParkingLot {
         return true;
     }
 
+    // EFFECTS: Return the number of vacant spaces in string.
+    public String vacantSpacesToString() {
+        String str = "";
+        for (Space s: spaces) {
+            if (s.getIsVacancy()) {
+                str += s.getNum();
+                str += "\t";
+            }
+        }
+        return str;
+    }
+
+    // EFFECTS: Return the car license of all vehicles in string.
+    public String licenseToString() {
+        String str = "";
+        for (Vehicle v: vehicles) {
+            str += v.getCarLicense();
+            str += "\t";
+        }
+        return str;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Add v's parking fee to the balance
+    public void addChargeToBalance(Vehicle v) {
+        balance += v.getParkingFee();
+    }
+
+    //
     // EFFECTS: Return the vehicle which carLicense is equal to cl, if cl can not be found, return null.
     public Vehicle searchVehicle(String cl) {
         for (Vehicle v : vehicles) {
@@ -67,16 +98,16 @@ public class ParkingLot {
         return null;
     }
 
-    // MODIFIES: this
-    // EFFECTS: Add v's parking fee to the balance
-    public void addChargeToBalance(Vehicle v) {
-        balance += v.getParkingFee();
-    }
 
-    // MODIFIES: this
-    // EFFECTS: Subtract the punishment amount from the balance
-    public void subtractFromBalance() {
-        balance -= PUNISHMENT_AMOUNT;
+    // REQUIRES: There must be a space with num n.
+    // EFFECTS: Return the space which num is equal to n.
+    public Space searchSpace(int n) {
+        for (Space s : spaces) {
+            if (s.getNum() == n) {
+                return s;
+            }
+        }
+        return null;
     }
 
     public int getBalance() {
@@ -101,10 +132,6 @@ public class ParkingLot {
     // EFFECTS: Return the number of elements in vehicles
     public int getSizeVehicles() {
         return vehicles.size();
-    }
-
-    public int getPunishmentAmount() {
-        return PUNISHMENT_AMOUNT;
     }
 }
 
