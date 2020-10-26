@@ -1,8 +1,14 @@
 package model;
 
+import exception.NoSpaceException;
+import exception.NoVehicleException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Date;
+
+import static model.Vehicle.MILLISECOND_IN_MINUTES;
+import static model.Vehicle.PARKING_FEE_PER_HOUR;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ParkingLotTest {
@@ -16,7 +22,7 @@ public class ParkingLotTest {
 
     @Test
     void testAddSpaceOne() {
-        Space s = new Space(3, 0, 0, 0, 0);
+        Space s = new Space(3);
         assertEquals(0, parkingLot.getSizeSpaces());
         parkingLot.addSpace(s);
         assertEquals(1, parkingLot.getSizeSpaces());
@@ -25,9 +31,9 @@ public class ParkingLotTest {
 
     @Test
     void testAddSpaceMany() {
-        Space s1 = new Space(2, 0, 0, 0, 0);
-        Space s2 = new Space(5, 0, 0, 0, 0);
-        Space s3 = new Space(7, 0, 0, 0, 0);
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
         parkingLot.addSpace(s1);
         parkingLot.addSpace(s2);
         parkingLot.addSpace(s3);
@@ -39,134 +45,197 @@ public class ParkingLotTest {
 
     @Test
     void testAddVehicleOne() {
-        Vehicle v = new Vehicle("UNIOP0", 52,34);
+        Space s1 = new Space(5);
+        parkingLot.addSpace(s1);
         assertEquals(0, parkingLot.getSizeVehicles());
-        parkingLot.addVehicle(v);
+        Vehicle v1 = new Vehicle("UNIOP0");
+        try {
+            parkingLot.addVehicle(v1, 5);
+        } catch (NoSpaceException e) {
+            fail();
+        }
         assertEquals(1, parkingLot.getSizeVehicles());
-        assertEquals("UNIOP0", parkingLot.getVehicle(0).getCarLicense());
+        assertEquals(v1, parkingLot.getVehicle(0));
+        assertEquals(s1, parkingLot.getVehicle(0).getSpace());
     }
 
     @Test
     void testAddVehicleMany() {
-        Vehicle v1 = new Vehicle("890UIO", 52,34);
-        Vehicle v2 = new Vehicle("909H89", 64,78);
-        Vehicle v3 = new Vehicle("ASD567", 98,67);
-        parkingLot.addVehicle(v1);
-        parkingLot.addVehicle(v2);
-        parkingLot.addVehicle(v3);
-        assertEquals(3, parkingLot.getSizeVehicles());
-        assertEquals("890UIO", parkingLot.getVehicle(0).getCarLicense());
-        assertEquals("909H89", parkingLot.getVehicle(1).getCarLicense());
-        assertEquals("ASD567", parkingLot.getVehicle(2).getCarLicense());
-    }
-
-    @Test
-    void testRemoveVehicle() {
-        Space s1 = new Space(2, 0, 0, 0, 0);
-        Space s2 = new Space(5, 0, 0, 0, 0);
-        Space s3 = new Space(7, 0, 0, 0, 0);
-        Vehicle v1 = new Vehicle("890UIO", 52,34);
-        Vehicle v2 = new Vehicle("909H89", 64,78);
-        Vehicle v3 = new Vehicle("ASD567", 98,67);
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
         parkingLot.addSpace(s1);
         parkingLot.addSpace(s2);
         parkingLot.addSpace(s3);
-        parkingLot.addVehicle(v1);
-        parkingLot.addVehicle(v2);
-        parkingLot.addVehicle(v3);
-        v1.assignToSpace(s1);
-        v2.assignToSpace(s2);
-        v3.assignToSpace(s3);
-        parkingLot.removeVehicle("890UIO");
+        Vehicle v1 = new Vehicle("890UIO");
+        Vehicle v2 = new Vehicle("909H89");
+        Vehicle v3 = new Vehicle("ASD567");
+        try {
+            parkingLot.addVehicle(v1,2);
+            parkingLot.addVehicle(v2, 5);
+            parkingLot.addVehicle(v3, 7);
+        } catch (NoSpaceException e) {
+            fail();
+        }
+        assertEquals(3, parkingLot.getSizeVehicles());
+        assertEquals(v1, parkingLot.getVehicle(0));
+        assertEquals(v2, parkingLot.getVehicle(1));
+        assertEquals(v3, parkingLot.getVehicle(2));
+    }
+
+    @Test
+    void testAddVehicleException() {
+        Space s1 = new Space(5);
+        parkingLot.addSpace(s1);
+        Vehicle v1 = new Vehicle("UNIOP0");
+        try {
+            parkingLot.addVehicle(v1, 3);
+            fail();
+        } catch (NoSpaceException e) {
+            // expected
+        }
+        assertEquals(0, parkingLot.getSizeVehicles());
+    }
+
+    @Test
+    void testUnassignVehicle() {
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
+        Vehicle v1 = new Vehicle("890UIO");
+        Vehicle v2 = new Vehicle("909H89");
+        Vehicle v3 = new Vehicle("ASD567");
+        parkingLot.addSpace(s1);
+        parkingLot.addSpace(s2);
+        parkingLot.addSpace(s3);
+        try {
+            parkingLot.addVehicle(v1, 2);
+            parkingLot.addVehicle(v2, 5);
+            parkingLot.addVehicle(v3, 7);
+        } catch (NoSpaceException e) {
+            fail();
+        }
+        Date now = new Date();
+        now.setTime(v1.getStartTime().getTime() + 55 * MILLISECOND_IN_MINUTES);
+        try {
+            parkingLot.unassignVehicle("890UIO", now);
+        } catch (NoVehicleException e) {
+            fail();
+        }
+        assertEquals(PARKING_FEE_PER_HOUR, parkingLot.getBalance());
         assertEquals(2, parkingLot.getSizeVehicles());
-        assertEquals("909H89", parkingLot.getVehicle(0).getCarLicense());
-        assertEquals("ASD567", parkingLot.getVehicle(1).getCarLicense());
-        assertEquals("", s1.getCarLicense());
-        assertTrue(s1.getIsVacancy());
+        assertEquals(v2, parkingLot.getVehicle(0));
+        assertEquals(v3, parkingLot.getVehicle(1));
+        assertNull(v1.getSpace());
+    }
+
+    @Test
+    void testUnassignVehicleException() {
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
+        Vehicle v1 = new Vehicle("890UIO");
+        Vehicle v2 = new Vehicle("909H89");
+        Vehicle v3 = new Vehicle("ASD567");
+        parkingLot.addSpace(s1);
+        parkingLot.addSpace(s2);
+        parkingLot.addSpace(s3);
+        try {
+            parkingLot.addVehicle(v1, 2);
+            parkingLot.addVehicle(v2, 5);
+            parkingLot.addVehicle(v3, 7);
+        } catch (NoSpaceException e) {
+            fail();
+        }
+        Date date = new Date();
+        try {
+            parkingLot.unassignVehicle("DUI098", date);
+            fail();
+        } catch (NoVehicleException e) {
+            // expected
+        }
+        assertEquals(3, parkingLot.getSizeVehicles());
     }
 
     @Test
     void testCheckNoVacantSpaceOne() {
-        Space s = new Space(3, 0, 0, 0, 0);
+        Space s = new Space(3);
         parkingLot.addSpace(s);
         assertFalse(parkingLot.checkNoVacantSpace());
-        Vehicle v = new Vehicle("898054", 52,34);
-        parkingLot.addVehicle(v);
-        v.assignToSpace(s);
+        Vehicle v = new Vehicle("898054");
+        try {
+            parkingLot.addVehicle(v, 3);
+        } catch (NoSpaceException e) {
+            fail();
+        }
         assertTrue(parkingLot.checkNoVacantSpace());
     }
 
     @Test
     void testCheckNoVacantSpaceMany() {
-        Space s1 = new Space(2, 0, 0, 0, 0);
-        Space s2 = new Space(5, 0, 0, 0, 0);
-        Space s3 = new Space(7, 0, 0, 0, 0);
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
         parkingLot.addSpace(s1);
         parkingLot.addSpace(s2);
         parkingLot.addSpace(s3);
         assertFalse(parkingLot.checkNoVacantSpace());
 
-        Vehicle v1 = new Vehicle("UUUUUI", 52,34);
-        parkingLot.addVehicle(v1);
-        v1.assignToSpace(s1);
-        assertFalse(parkingLot.checkNoVacantSpace());
+        Vehicle v1 = new Vehicle("UUUUUI");
+        Vehicle v2 = new Vehicle("KK5678");
+        Vehicle v3 = new Vehicle("KLOP09");
 
-        Vehicle v2 = new Vehicle("KK5678", 64,78);
-        parkingLot.addVehicle(v2);
-        v2.assignToSpace(s2);
-        assertFalse(parkingLot.checkNoVacantSpace());
-
-        Vehicle v3 = new Vehicle("KLOP09", 98,67);
-        parkingLot.addVehicle(v3);
-        v3.assignToSpace(s3);
-        assertTrue(parkingLot.checkNoVacantSpace());
+        try {
+            parkingLot.addVehicle(v1, 2);
+            assertFalse(parkingLot.checkNoVacantSpace());
+            parkingLot.addVehicle(v2, 5);
+            assertFalse(parkingLot.checkNoVacantSpace());
+            parkingLot.addVehicle(v3, 7);
+            assertTrue(parkingLot.checkNoVacantSpace());
+        } catch (NoSpaceException e) {
+            fail();
+        }
     }
 
     @Test
     void testCheckAllVacantOne() {
-        Space s = new Space(3, 0, 0, 0, 0);
+        Space s = new Space(3);
         parkingLot.addSpace(s);
         assertTrue(parkingLot.checkAllVacant());
-        Vehicle v = new Vehicle("KK5678", 52,34);
-        parkingLot.addVehicle(v);
-        v.assignToSpace(s);
+        Vehicle v = new Vehicle("KK5678");
+        try {
+            parkingLot.addVehicle(v, 3);
+        } catch (NoSpaceException e) {
+            fail();
+        }
         assertFalse(parkingLot.checkAllVacant());
     }
 
     @Test
     void testCheckAllVacantMany() {
-        Space s1 = new Space(2, 0, 0, 0, 0);
-        Space s2 = new Space(5, 0, 0, 0, 0);
-        Space s3 = new Space(7, 0, 0, 0, 0);
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
         parkingLot.addSpace(s1);
         parkingLot.addSpace(s2);
         parkingLot.addSpace(s3);
         assertTrue(parkingLot.checkAllVacant());
 
-        Vehicle v = new Vehicle("KK5678", 52,34);
-        parkingLot.addVehicle(v);
-        v.assignToSpace(s1);
+        Vehicle v = new Vehicle("KK5678");
+        try {
+            parkingLot.addVehicle(v, 2);
+        } catch (NoSpaceException e) {
+            fail();
+        }
         assertFalse(parkingLot.checkAllVacant());
     }
 
 
     @Test
-    void testAddChargeToBalance() {
-        Vehicle v1 = new Vehicle("KK5678", 52,34);
-        int pf1 = v1.getParkingFee();
-        parkingLot.addChargeToBalance(v1);
-        assertEquals(pf1, parkingLot.getBalance());
-        Vehicle v2 = new Vehicle("UUUUUI", 64,78);
-        int pf2 = v2.getParkingFee();
-        parkingLot.addChargeToBalance(v2);
-        assertEquals(pf1 + pf2, parkingLot.getBalance());
-    }
-
-    @Test
     void testVacantSpacesToStringAllVacant() {
-        Space s1 = new Space(2, 0, 0, 0, 0);
-        Space s2 = new Space(5, 0, 0, 0, 0);
-        Space s3 = new Space(7, 0, 0, 0, 0);
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
         parkingLot.addSpace(s1);
         parkingLot.addSpace(s2);
         parkingLot.addSpace(s3);
@@ -175,15 +244,15 @@ public class ParkingLotTest {
 
     @Test
     void testVacantSpacesToStringNoVacant() {
-        Space s1 = new Space(2, 0, 0, 0, 0);
-        Space s2 = new Space(5, 0, 0, 0, 0);
-        Space s3 = new Space(7, 0, 0, 0, 0);
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
         parkingLot.addSpace(s1);
         parkingLot.addSpace(s2);
         parkingLot.addSpace(s3);
-        Vehicle v1 = new Vehicle("UUUUUI", 52,34);
-        Vehicle v2 = new Vehicle("YU6574", 64,78);
-        Vehicle v3 = new Vehicle("FFRTDE", 98,67);
+        Vehicle v1 = new Vehicle("UUUUUI");
+        Vehicle v2 = new Vehicle("YU6574");
+        Vehicle v3 = new Vehicle("FFRTDE");
         v1.assignToSpace(s1);
         v2.assignToSpace(s2);
         v3.assignToSpace(s3);
@@ -192,54 +261,35 @@ public class ParkingLotTest {
 
     @Test
     void testVacantSpacesToStringSomeVacant() {
-        Space s1 = new Space(2, 0, 0, 0, 0);
-        Space s2 = new Space(5, 0, 0, 0, 0);
-        Space s3 = new Space(7, 0, 0, 0, 0);
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
         parkingLot.addSpace(s1);
         parkingLot.addSpace(s2);
         parkingLot.addSpace(s3);
-        Vehicle v1 = new Vehicle("GG768B", 52, 34);
+        Vehicle v1 = new Vehicle("GG768B");
         v1.assignToSpace(s1);
         assertEquals("5\t7\t", parkingLot.vacantSpacesToString());
     }
 
     @Test
     void testLicenseToString () {
-        Vehicle v1 = new Vehicle("NUZ678", 52,34);
-        Vehicle v2 = new Vehicle("U8C0KW", 64,78);
-        Vehicle v3 = new Vehicle("UH0J77", 98,67);
-        parkingLot.addVehicle(v1);
-        parkingLot.addVehicle(v2);
-        parkingLot.addVehicle(v3);
-        assertEquals("NUZ678\tU8C0KW\tUH0J77\t", parkingLot.licenseToString());
-    }
-
-    @Test
-    void testSearchVehicle () {
-        Vehicle v1 = new Vehicle("NUZ678", 52,34);
-        Vehicle v2 = new Vehicle("U8C0KW", 64,78);
-        Vehicle v3 = new Vehicle("UH0J77", 98,67);
-        parkingLot.addVehicle(v1);
-        parkingLot.addVehicle(v2);
-        parkingLot.addVehicle(v3);
-        Vehicle v = parkingLot.searchVehicle("NUZ678");
-        assertEquals(v1.getParkingFee(), v.getParkingFee());
-        assertNull(parkingLot.searchVehicle("7888"));
-        assertEquals(52, v.getPositionX());
-        assertEquals(34, v.getPositionY());
-    }
-
-    @Test
-    void testSearchSpace() {
-        Space s1 = new Space(2, 0, 0, 0, 0);
-        Space s2 = new Space(5, 3, 0, 0, 0);
-        Space s3 = new Space(7, 0, 0, 0, 0);
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
         parkingLot.addSpace(s1);
         parkingLot.addSpace(s2);
         parkingLot.addSpace(s3);
-        Space s = parkingLot.searchSpace(5);
-        assertEquals(3, s.getUpperBoundary());
-        assertNull(parkingLot.searchSpace(1));
+        Vehicle v1 = new Vehicle("NUZ678");
+        Vehicle v2 = new Vehicle("U8C0KW");
+        Vehicle v3 = new Vehicle("UH0J77");
+        try {
+            parkingLot.addVehicle(v1,2 );
+            parkingLot.addVehicle(v2,5);
+            parkingLot.addVehicle(v3, 7);
+        } catch (NoSpaceException e) {
+            fail();
+        }
+        assertEquals("NUZ678 U8C0KW UH0J77 ", parkingLot.licenseToString());
     }
-
 }

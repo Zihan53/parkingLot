@@ -1,0 +1,37 @@
+{
+  "balance": 35,
+  "spaces": [
+    {
+      "num": "1",
+      "isVacancy": "true"
+    },
+    {
+      "num": "2",
+      "isVacancy": "false"
+    },
+    {
+      "num": "3",
+      "isVacancy": "false"
+    },
+    {
+      "num": "4",
+      "isVacancy": "true"
+    },
+    {
+      "num": "5",
+      "isVacancy": "true"
+    }
+  ],
+  "vehicles": [
+    {
+      "licensePlateNum": "5398Y",
+      "parkingNum": "2",
+      "startTime": "2020-10-24 19:28"
+    },
+    {
+      "licensePlateNum": "G62D7",
+      "parkingNum": "3",
+      "startTime": "2020-10-25 05:49"
+    }
+  ]
+}

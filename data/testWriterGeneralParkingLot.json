@@ -1,0 +1,22 @@
+{
+    "balance": 78,
+    "spaces": [
+        {
+            "isVacancy": true,
+            "num": 1
+        },
+        {
+            "isVacancy": false,
+            "num": 2
+        },
+        {
+            "isVacancy": true,
+            "num": 3
+        }
+    ],
+    "vehicles": [{
+        "licensePlateNum": "6dVP9",
+        "parkingNum": 2,
+        "startTime": "2020-10-23 21:13"
+    }]
+}

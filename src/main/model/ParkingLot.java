@@ -1,8 +1,14 @@
 package model;
 
-import java.util.ArrayList;
+import exception.NoSpaceException;
+import exception.NoVehicleException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-// Represents a parking lot having a list of spaces, list of vehicles and balance (in dollars)
+import java.util.ArrayList;
+import java.util.Date;
+
+// Represents a parking lot with a list of spaces, list of vehicles and balance (in dollars)
 public class ParkingLot {
 
     private ArrayList<Space> spaces;
@@ -22,19 +28,23 @@ public class ParkingLot {
         spaces.add(s);
     }
 
+    // REQUIRES: There must be vacant space
     // MODIFIES: this
-    // EFFECTS: Add v to vehicles.
-    public void addVehicle(Vehicle v) {
+    // EFFECTS: Add v to vehicles and assign the vehicle the space with number sn
+    public void addVehicle(Vehicle v, int sn) throws NoSpaceException {
+        Space s = searchSpace(sn);
         vehicles.add(v);
+        v.assignToSpace(s);
     }
 
-    // REQUIRE: There must be a vehicle with carLicense cl in vehicles.
     // MODIFIES: this
-    // EFFECTS: Remove the vehicle with carLicense cl from vehicles.
-    public void removeVehicle(String cl) {
+    // EFFECTS: Unassign the vehicle with licensePlateNumber cl and remove it from vehicles
+    //          And add the corresponding parking fee to balance
+    public void unassignVehicle(String cl, Date now) throws NoVehicleException {
         Vehicle v = searchVehicle(cl);
+        addChargeToBalance(v, now);
+        v.removeFromSpace();
         vehicles.remove(v);
-        v.removeFromSpace(searchSpace(v.getPlaceNum()));
     }
 
     // REQUIRES: Spaces can not be empty.
@@ -61,57 +71,66 @@ public class ParkingLot {
 
     // EFFECTS: Return the number of vacant spaces in string.
     public String vacantSpacesToString() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (Space s: spaces) {
             if (s.getIsVacancy()) {
-                str += s.getNum();
-                str += "\t";
+                str.append(s.getNum());
+                str.append("\t");
             }
         }
-        return str;
+        return str.toString();
     }
 
     // EFFECTS: Return the car license of all vehicles in string.
     public String licenseToString() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         for (Vehicle v: vehicles) {
-            str += v.getCarLicense();
-            str += "\t";
+            str.append(v.getLicensePlateNum());
+            str.append(" ");
         }
-        return str;
+        return str.toString();
     }
 
     // MODIFIES: this
     // EFFECTS: Add v's parking fee to the balance
-    public void addChargeToBalance(Vehicle v) {
-        balance += v.getParkingFee();
+    private void addChargeToBalance(Vehicle v, Date now) {
+        balance += v.calculateParkingFee(now);
     }
 
-    //
-    // EFFECTS: Return the vehicle which carLicense is equal to cl, if cl can not be found, return null.
-    public Vehicle searchVehicle(String cl) {
+    // EFFECTS: Return the vehicle which carLicense is equal to cl, if cl can not be found, throw a NoVehicleException
+    private Vehicle searchVehicle(String cl) throws NoVehicleException {
         for (Vehicle v : vehicles) {
-            if (v.getCarLicense().equals(cl)) {
+            if (v.getLicensePlateNum().equals(cl)) {
                 return v;
             }
         }
-        return null;
+        throw new NoVehicleException();
     }
 
-
-    // REQUIRES: There must be a space with num n.
-    // EFFECTS: Return the space which num is equal to n.
-    public Space searchSpace(int n) {
+    // EFFECTS: Return the space which num is equal to n, if n can not be found, throw a NoSpaceException
+    private Space searchSpace(int n) throws NoSpaceException {
         for (Space s : spaces) {
             if (s.getNum() == n) {
                 return s;
             }
         }
-        return null;
+        throw new NoSpaceException();
     }
 
     public int getBalance() {
         return balance;
+    }
+
+    public ArrayList<Space> getSpaces() {
+        return spaces;
+    }
+
+    public ArrayList<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public void setBalance(int b) {
+        balance = b;
     }
 
     // EFFECTS: Return the ith element in spaces.
@@ -133,6 +152,41 @@ public class ParkingLot {
     public int getSizeVehicles() {
         return vehicles.size();
     }
+
+    // Follow the format in JsonSerializationDemo
+    // EFFECTS: Return parkingLot as a Json object
+    public JSONObject parkingLotToJson() {
+        JSONObject json = new JSONObject();
+        json.put("spaces", spacesToJson());
+        json.put("vehicles", vehiclesToJson());
+        json.put("balance", balance);
+        return json;
+    }
+
+    // Follow the format in JsonSerializationDemo
+    // EFFECTS: Return vehicles in this parkingLor as a JSON array
+    private JSONArray vehiclesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Vehicle v : vehicles) {
+            jsonArray.put(v.vehicleToJson());
+        }
+
+        return jsonArray;
+    }
+
+    // Follow the format in JsonSerializationDemo
+    // EFFECTS: Return spaces in this parkingLor as a JSON array
+    private JSONArray spacesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Space s : spaces) {
+            jsonArray.put(s.spaceToJson());
+        }
+
+        return jsonArray;
+    }
+
 }
 
 
