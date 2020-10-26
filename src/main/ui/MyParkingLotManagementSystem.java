@@ -10,7 +10,6 @@ import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -214,10 +213,6 @@ public class MyParkingLotManagementSystem {
             System.out.println("Loaded from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
-        } catch (NoSpaceException e) {
-            System.out.println("One or more space number for vehicles are wrong");
-        } catch (ParseException e) {
-            // pass
         }
     }
 }

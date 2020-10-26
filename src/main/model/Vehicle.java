@@ -51,7 +51,7 @@ public class Vehicle {
     //          Otherwise, hours * PARKING_FEE_PER_HOUR
     public int calculateParkingFee(Date now) {
         long t = calculateParkingDuration(now);
-        if (t <= MAXIMUM_PARKING_DAYS * HOURS_IN_DAY * MINUTES_IN_HOUR && t >= 0) {
+        if (t <= MAXIMUM_PARKING_DAYS * HOURS_IN_DAY * MINUTES_IN_HOUR) {
             int pf = PARKING_FEE_PER_HOUR * ((int) (t / MINUTES_IN_HOUR));
             if ((t % MINUTES_IN_HOUR) >= MINUTES_TREATED_AS_HOUR) {
                 pf += PARKING_FEE_PER_HOUR;
