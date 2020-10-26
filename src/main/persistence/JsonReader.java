@@ -28,7 +28,7 @@ public class JsonReader {
 
     // EFFECTS: reads parkingLot from file and returns it;
     // throws IOException if an error occurs reading data from file
-    public ParkingLot read() throws IOException {
+    public ParkingLot read() throws IOException, NoSpaceException, ParseException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseParkingLot(jsonObject);
@@ -46,7 +46,7 @@ public class JsonReader {
     }
 
     // EFFECTS: parses parkingLot from JSON object and returns it
-    private ParkingLot parseParkingLot(JSONObject jsonObject) {
+    private ParkingLot parseParkingLot(JSONObject jsonObject) throws NoSpaceException, ParseException {
         ParkingLot pl = new ParkingLot();
         addSpaces(pl, jsonObject);
         addVehicles(pl, jsonObject);
@@ -76,7 +76,7 @@ public class JsonReader {
 
     // MODIFIES: pl
     // EFFECTS: parses vehicles from JSON object and adds them to parkingLot
-    private void addVehicles(ParkingLot pl, JSONObject jsonObject) {
+    private void addVehicles(ParkingLot pl, JSONObject jsonObject) throws NoSpaceException, ParseException {
         JSONArray jsonArray = jsonObject.getJSONArray("vehicles");
         for (Object json : jsonArray) {
             JSONObject nextVehicle = (JSONObject) json;
@@ -86,18 +86,14 @@ public class JsonReader {
 
     // MODIFIES: pl
     // EFFECTS: parses thingy from JSON object and adds it to workroom
-    private void addVehicle(ParkingLot pl, JSONObject jsonObject) {
+    private void addVehicle(ParkingLot pl, JSONObject jsonObject) throws NoSpaceException, ParseException {
         String licensePlateNum = jsonObject.getString("licensePlateNum");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
-        try {
-            Date startTime = sdf.parse(jsonObject.getString("startTime"));
-            int pn = jsonObject.getInt("parkingNum");
-            Vehicle vehicle = new Vehicle(licensePlateNum);
-            pl.addVehicle(vehicle, pn);
-            vehicle.setStartTime(startTime);
-        } catch (NoSpaceException | ParseException e) {
-            // pass
-        }
+        Date startTime = sdf.parse(jsonObject.getString("startTime"));
+        int pn = jsonObject.getInt("parkingNum");
+        Vehicle vehicle = new Vehicle(licensePlateNum);
+        pl.addVehicle(vehicle, pn);
+        vehicle.setStartTime(startTime);
     }
 }
