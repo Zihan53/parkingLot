@@ -1,19 +1,30 @@
 package ui;
 
+import exception.NoSpaceException;
+import exception.NoVehicleException;
 import model.ParkingLot;
 import model.Space;
 import model.Vehicle;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Date;
 import java.util.Scanner;
 
+// Follow the format in TellerApp
 // Parking Lot Simulation Application
 public class MyParkingLotManagementSystem {
 
-    private static final int SPACES_NUM = 10;
-    private static final String DEFAULT_COMMAND = "arcvq";
+    private static final String JSON_STORE = "./data/parkingLot.json";
+    private static final int SPACES_NUM = 5;
+    private static final String DEFAULT_COMMAND = "arcvslq";
 
     private ParkingLot myParkingLot;
     private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
     private boolean keepGoing;
 
     // EFFECTS: runs the management system
@@ -29,8 +40,8 @@ public class MyParkingLotManagementSystem {
         while (keepGoing) {
             displayMenu();
             while (true) {
-                command = input.next();      // use the code in
-                command.toLowerCase();       // TellerApp
+                command = input.next();
+                command.toLowerCase();
                 if (DEFAULT_COMMAND.contains(command) && command.length() == 1) {
                     break;
                 } else {
@@ -46,13 +57,15 @@ public class MyParkingLotManagementSystem {
     private void init() {
         myParkingLot = new ParkingLot();
         input = new Scanner(System.in);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         keepGoing = true;
 
         System.out.println("Hi, Welcome to 'My Parking Lot'. The most efficient tool for parking lot management. "
                 + "Follow the instructions to explore now.");
 
         for (int i = 1; i <= SPACES_NUM; i++) {
-            Space space = new Space(i, 0, 0, 0, 0);
+            Space space = new Space(i);
             myParkingLot.addSpace(space);
         }
     }
@@ -65,6 +78,8 @@ public class MyParkingLotManagementSystem {
         System.out.println("\tr -> Remove a vehicle");
         System.out.println("\tc -> Check the information of a vehicle in your parking lot");
         System.out.println("\tv -> View your current balance");
+        System.out.println("\ts -> Save information in the parking lot to file");
+        System.out.println("\tl -> Load previous parking lot information to file");
         System.out.println("\tq -> quit");
     }
 
@@ -73,13 +88,21 @@ public class MyParkingLotManagementSystem {
     // EFFECTS: processes user command
     private void processCommand(String command) {
         if (command.equals("a")) {
-            addNewVehicle();
+            if (myParkingLot.checkNoVacantSpace()) {
+                System.out.println("Sorry! No vacant space.");
+            } else {
+                addNewVehicle();
+            }
         } else if (command.equals("r")) {
             removeExistingVehicle();
         } else if (command.equals("c")) {
             checkInformationOfVehicle();
         } else if (command.equals("v")) {
             viewBalance();
+        } else if (command.equals("s")) {
+            saveParkingLot();
+        } else if (command.equals("l")) {
+            loadParkingLot();
         } else {
             keepGoing = false;
             System.out.println("Goodbye!");
@@ -91,24 +114,24 @@ public class MyParkingLotManagementSystem {
     // EFFECTS: Add a new vehicle and assign vehicle to a vacant space.
     private void addNewVehicle() {
         String command;
-        if (myParkingLot.checkNoVacantSpace()) {
-            System.out.println("Sorry! No vacant space.");
-        } else {
-            System.out.println("Please enter the license-plate number.");
-            Vehicle vehicle = new Vehicle(input.next(), 0, 0);
-            myParkingLot.addVehicle(vehicle);
-            System.out.println("The license-plate number is " + vehicle.getCarLicense() + " and its"
-                    + " parking fee is $" + vehicle.getParkingFee() + ". The followings are numbers of vacant places. "
-                    + "Please help the vehicle moving into a space by enter a number.");
-            System.out.println("\n" + myParkingLot.vacantSpacesToString());
+        System.out.println("Please enter the license-plate number.");
+        command = input.next();
+        try {
+            myParkingLot.searchVehicle(command);
+            System.out.println("The vehicle has already been in the parking lot.");
+        } catch (NoVehicleException v) {
+            Vehicle vehicle = new Vehicle(command);
+            System.out.println("The followings are numbers of vacant places. Please enter the number you want"
+                    + " to park in\n" + myParkingLot.vacantSpacesToString());
+
             while (true) {
                 command = input.next();
-                if (myParkingLot.vacantSpacesToString().contains(command)) {
-                    vehicle.assignToSpace(myParkingLot.searchSpace(Integer.parseInt(command)));
-                    System.out.println("The vehicle " + vehicle.getCarLicense() + " has been successfully moved into "
-                            + "space " + command + ".");
+                try {
+                    myParkingLot.addVehicle(vehicle, Integer.parseInt(command));
+                    System.out.println("The vehicle " + vehicle.getLicensePlateNum() + " has been successfully "
+                            + "moved into space " + command + ".");
                     break;
-                } else {
+                } catch (NoSpaceException s) {
                     System.out.println("Invalid input. Please select once again");
                 }
             }
@@ -127,13 +150,13 @@ public class MyParkingLotManagementSystem {
                     + "They are " + cls + ". Enter a license-plate number to remove");
             while (true) {
                 command = input.next();
-                if (cls.contains(command)) {
-                    myParkingLot.addChargeToBalance(myParkingLot.searchVehicle(command));
-                    myParkingLot.removeVehicle(command);
+                Date now = new Date();
+                try {
+                    myParkingLot.unassignVehicle(command, now);
                     System.out.println("Vehicle has been removed. You current balance is $"
                             + myParkingLot.getBalance());
                     break;
-                } else {
+                } catch (NoVehicleException e) {
                     System.out.println("Invalid input. Please select once again");
                 }
             }
@@ -152,10 +175,11 @@ public class MyParkingLotManagementSystem {
                     + "They are " + cls + ". Enter a license-plate number to view the information");
             while (true) {
                 command = input.next();
-                if (cls.contains(command)) {
-                    System.out.println(myParkingLot.searchVehicle(command).vehicleToString());
+                try {
+                    Date now = new Date();
+                    System.out.println(myParkingLot.searchVehicle(command).vehicleToString(now));
                     break;
-                } else {
+                } catch (NoVehicleException e) {
                     System.out.println("Invalid input. Please select once again");
                 }
             }
@@ -165,6 +189,31 @@ public class MyParkingLotManagementSystem {
     // EFFECTS: View current balance.
     private void viewBalance() {
         System.out.println("Your current balance is $" + myParkingLot.getBalance());
+    }
+
+    // Code based on JsonSerializationDemo
+    // EFFECTS: Save the parking lot to file
+    private void saveParkingLot() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(myParkingLot);
+            jsonWriter.close();
+            System.out.println("Saved to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // Code based on JsonSerializationDemo
+    // MODIFIES: this
+    // EFFECTS: loads workroom from file
+    private void loadParkingLot() {
+        try {
+            myParkingLot = jsonReader.read();
+            System.out.println("Loaded from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 }
 

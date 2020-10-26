@@ -98,7 +98,7 @@ public class ParkingLot {
     }
 
     // EFFECTS: Return the vehicle which carLicense is equal to cl, if cl can not be found, throw a NoVehicleException
-    private Vehicle searchVehicle(String cl) throws NoVehicleException {
+    public Vehicle searchVehicle(String cl) throws NoVehicleException {
         for (Vehicle v : vehicles) {
             if (v.getLicensePlateNum().equals(cl)) {
                 return v;
@@ -108,7 +108,7 @@ public class ParkingLot {
     }
 
     // EFFECTS: Return the space which num is equal to n, if n can not be found, throw a NoSpaceException
-    private Space searchSpace(int n) throws NoSpaceException {
+    public Space searchSpace(int n) throws NoSpaceException {
         for (Space s : spaces) {
             if (s.getNum() == n) {
                 return s;
