@@ -16,6 +16,7 @@ reminder when the park is full). So, I design this application.
 - As a user, I want to be able to view an existing vehicle's information.
 - As a user, I want to be able to get a notification once there is some change in my balance and view my balance
 whenever I want.
+- As a user, I want to be able to view the charging standards.
 - As a user, I want to be able to save the information in parkingLot in a file.
 - As a user, I want to be able to load previous parkingLot's information.
 

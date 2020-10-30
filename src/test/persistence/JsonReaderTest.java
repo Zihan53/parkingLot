@@ -1,5 +1,6 @@
 package persistence;
 
+import exception.NoSpaceException;
 import model.ParkingLot;
 import model.Space;
 import model.Vehicle;
@@ -25,6 +26,10 @@ public class JsonReaderTest extends JsonTest {
             fail("IOException expected");
         } catch (IOException e) {
             // pass
+        } catch (ParseException e) {
+            fail("ParseException thrown, IOException expected");
+        } catch (NoSpaceException e) {
+            fail("NoSpaceException thrown, IOException expected");
         }
     }
 
@@ -38,6 +43,10 @@ public class JsonReaderTest extends JsonTest {
             assertEquals(0, pl.getBalance());
         } catch (IOException e) {
             fail("Couldn't read from file");
+        } catch (ParseException e) {
+            fail("The Date format in the file is wrong");
+        } catch (NoSpaceException e) {
+            fail("Some vehicles have wrong space number in the file");
         }
     }
 
@@ -66,7 +75,9 @@ public class JsonReaderTest extends JsonTest {
         } catch (IOException e) {
             fail("Couldn't read from file");
         } catch (ParseException e) {
-            // pass
+            fail("The Date format in the file is wrong");
+        } catch (NoSpaceException e) {
+            fail("Some vehicles have wrong space number in the file");
         }
     }
 }

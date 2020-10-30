@@ -45,6 +45,10 @@ public class JsonWriterTest extends JsonTest{
             assertEquals(0, pl.getSizeVehicles());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
+        } catch (ParseException e) {
+            fail("The Date format in the file is wrong");
+        } catch (NoSpaceException e) {
+            fail("Some vehicle have wrong space number in the file");
         }
     }
 
@@ -80,9 +84,9 @@ public class JsonWriterTest extends JsonTest{
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         } catch (NoSpaceException e) {
-            fail("Wrong space number");
+            fail("Some vehicle have wrong space number in the file");
         } catch (ParseException e) {
-            fail("Wrong date format");
+            fail("The Date format in the file is wrong");
         }
     }
 }

@@ -10,8 +10,11 @@ import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.Scanner;
+
+import static model.Vehicle.*;
 
 // Follow the format in TellerApp
 // Parking Lot Simulation Application
@@ -19,7 +22,7 @@ public class MyParkingLotManagementSystem {
 
     private static final String JSON_STORE = "./data/parkingLot.json";
     private static final int SPACES_NUM = 5;
-    private static final String DEFAULT_COMMAND = "arcvslq";
+    private static final String DEFAULT_COMMAND = "arcvslkq";
 
     private ParkingLot myParkingLot;
     private Scanner input;
@@ -80,10 +83,11 @@ public class MyParkingLotManagementSystem {
         System.out.println("\tv -> View your current balance");
         System.out.println("\ts -> Save information in the parking lot to file");
         System.out.println("\tl -> Load previous parking lot information to file");
+        System.out.println("\tk -> Know the charging standards");
         System.out.println("\tq -> quit");
     }
 
-    // REQUIRES: command must be one of a, g, c, v, q;
+    // REQUIRES: command must be in DEFAULT_COMMAND
     // MODIFIES: this
     // EFFECTS: processes user command
     private void processCommand(String command) {
@@ -103,6 +107,8 @@ public class MyParkingLotManagementSystem {
             saveParkingLot();
         } else if (command.equals("l")) {
             loadParkingLot();
+        } else if (command.equals("k")) {
+            showChargingStandards();
         } else {
             keepGoing = false;
             System.out.println("Goodbye!");
@@ -213,7 +219,18 @@ public class MyParkingLotManagementSystem {
             System.out.println("Loaded from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
+        } catch (ParseException e) {
+            System.out.println("Check the Date in the file follows the format yyyy-MM-dd hh:mm");
+        } catch (NoSpaceException e) {
+            System.out.println("Some vehicle has wrong space number in the file");
         }
+    }
+
+    private void showChargingStandards() {
+        System.out.println("The parking fee is $" + PARKING_FEE_PER_HOUR + " per hour. And more than "
+                + MINUTES_TREATED_AS_HOUR + "min will be treated as one hour.");
+        System.out.println("If you park for more than " + MAXIMUM_PARKING_DAYS + " days, the parking fee is always $"
+                + MAXIMUM_PARKING_FEE + ".");
     }
 }
 
