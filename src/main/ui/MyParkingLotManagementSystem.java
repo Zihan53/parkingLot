@@ -19,7 +19,6 @@ import static model.Vehicle.*;
 // Follow the format in TellerApp
 // Parking Lot Simulation Application
 public class MyParkingLotManagementSystem {
-
     private static final String JSON_STORE = "./data/parkingLot.json";
     private static final int SPACES_NUM = 5;
     private static final String DEFAULT_COMMAND = "arcvslkq";
@@ -82,7 +81,7 @@ public class MyParkingLotManagementSystem {
         System.out.println("\tc -> Check the information of a vehicle in your parking lot");
         System.out.println("\tv -> View your current balance");
         System.out.println("\ts -> Save information in the parking lot to file");
-        System.out.println("\tl -> Load previous parking lot information to file");
+        System.out.println("\tl -> Load previous parking lot information from file");
         System.out.println("\tk -> Know the charging standards");
         System.out.println("\tq -> quit");
     }

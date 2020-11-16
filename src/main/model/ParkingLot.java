@@ -69,6 +69,16 @@ public class ParkingLot {
         return true;
     }
 
+    public int getVacantSpacesNum() {
+        int num = 0;
+        for (Space s: spaces) {
+            if (s.getIsVacancy()) {
+                num += 1;
+            }
+        }
+        return num;
+    }
+
     // EFFECTS: Return the number of vacant spaces in string.
     public String vacantSpacesToString() {
         StringBuilder str = new StringBuilder();
