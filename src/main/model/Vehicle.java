@@ -81,6 +81,15 @@ public class Vehicle {
                 + "Current Parking Fee: $" + pf;
     }
 
+    public String getDuration(Date now) {
+        long d = calculateParkingDuration(now);
+        int dd = (int) (d / MINUTES_IN_HOUR / HOURS_IN_DAY);
+        int dh = (int) ((d - dd * HOURS_IN_DAY * MINUTES_IN_HOUR) / MINUTES_IN_HOUR);
+        int dm = (int) (d - dd * HOURS_IN_DAY * MINUTES_IN_HOUR - dh * MINUTES_IN_HOUR);
+
+        return dd + "d-" + dh + "h-" + dm + "min";
+    }
+
     // REQUIRES: The vehicle must have been assigned to a space.
     // EFFECTS: Return the parking duration in minutes
     private long calculateParkingDuration(Date now) {
