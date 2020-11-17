@@ -77,12 +77,14 @@ public class CheckInPanel extends JPanel {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (spaceChoice.getSelectedItem() == " ") {
-                    notification.setText("Please choose a valid space number.");
+                if (spaceChoice.getSelectedItem() == " " || licenseInput.getText().equals("")) {
+                    notification.setText("Please choose a valid space number and input a valid license plate number.");
+                    Toolkit.getDefaultToolkit().beep();
                 } else {
                     try {
                         myParkingLot.searchVehicle(licenseInput.getText());
                         notification.setText("The vehicle has already been in the parking lot.");
+                        Toolkit.getDefaultToolkit().beep();
                     } catch (NoVehicleException exception) {
                         addVehicle();
                     }

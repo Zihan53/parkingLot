@@ -189,9 +189,9 @@ public class MainGui extends JFrame {
                     viewFeeStandardPanel.setMyParkingLot(myParkingLot);
                     note.setText("Total Spaces: " + myParkingLot.getSizeSpaces() + "\nRemaining Spaces: "
                             + myParkingLot.getVacantSpacesNum() + "\nBalance: $" + myParkingLot.getBalance());
-
                 } catch (IOException exception) {
                     System.out.println("Unable to read from file: " + JSON_STORE);
+                    Toolkit.getDefaultToolkit().beep();
                 } catch (ParseException exception) {
                     System.out.println("Check the Date in the file follows the format yyyy-MM-dd hh:mm");
                 } catch (NoSpaceException exception) {

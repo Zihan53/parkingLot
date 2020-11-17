@@ -74,12 +74,17 @@ public class CheckOutPanel extends JPanel {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    myParkingLot.unassignVehicle((String) licenseChoice.getSelectedItem(), new Date());
-                    notification.setText("Vehicle has been removed. You current balance is $"
-                            + myParkingLot.getBalance());
-                } catch (NoVehicleException exception) {
-                    // pass
+                if (licenseChoice.getSelectedItem() == " ") {
+                    notification.setText("Please select a vehicle");
+                    Toolkit.getDefaultToolkit().beep();
+                } else {
+                    try {
+                        myParkingLot.unassignVehicle((String) licenseChoice.getSelectedItem(), new Date());
+                        notification.setText("Vehicle has been removed. You current balance is $"
+                                + myParkingLot.getBalance());
+                    } catch (NoVehicleException exception) {
+                        // pass
+                    }
                 }
             }
         });
