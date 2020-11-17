@@ -30,7 +30,7 @@ public class MainGui extends JFrame {
 
     private JPanel customerMode;
     private JPanel mainMenu;
-    private JTextArea notification;
+    private JTextArea note;
     private JPanel buttonPanelOne;
     private JPanel buttonPanelTwo;
     private CheckInPanel checkInPanel;
@@ -50,7 +50,7 @@ public class MainGui extends JFrame {
     public MainGui() {
         super("Parking Lot Automatic Service System");
 
-        setNimBus();
+        setLook();
         setUIFont();
 
         init();
@@ -74,16 +74,16 @@ public class MainGui extends JFrame {
         initMainMenu();
         customerMode.add(mainMenu, "Main Menu");
 
-        checkInPanel = new CheckInPanel(myParkingLot, customerMode);
+        checkInPanel = new CheckInPanel(myParkingLot, customerMode, note);
         customerMode.add(checkInPanel, "Check In");
 
-        checkOutPanel = new CheckOutPanel(myParkingLot, customerMode);
+        checkOutPanel = new CheckOutPanel(myParkingLot, customerMode, note);
         customerMode.add(checkOutPanel, "Check Out");
 
-        viewFeeStandardPanel = new FeeStandardPanel(myParkingLot, customerMode);
+        viewFeeStandardPanel = new FeeStandardPanel(myParkingLot, customerMode, note);
         customerMode.add(viewFeeStandardPanel, "Fee Standard");
 
-        viewInformationPanel = new InformationPanel(myParkingLot, customerMode);
+        viewInformationPanel = new InformationPanel(myParkingLot, customerMode, note);
         customerMode.add(viewInformationPanel, "View Vehicles");
     }
 
@@ -109,13 +109,13 @@ public class MainGui extends JFrame {
     // MODIFIES: this
     // EFFECTS: Create a textArea to show notification
     private void createNotificationPart() {
-        notification = new JTextArea();
-        notification.setEditable(false);
-        notification.setOpaque(false);
-        notification.setBorder(null);
-        notification.setText("Total Spaces: " + myParkingLot.getSizeSpaces() + "\nRemaining Spaces: "
+        note = new JTextArea();
+        note.setEditable(false);
+        note.setOpaque(false);
+        note.setBorder(null);
+        note.setText("Total Spaces: " + myParkingLot.getSizeSpaces() + "\nRemaining Spaces: "
                 + myParkingLot.getVacantSpacesNum() + "\nBalance: $" + myParkingLot.getBalance());
-        mainMenu.add(notification);
+        mainMenu.add(note);
     }
 
     // MODIFIES: this
@@ -186,10 +186,10 @@ public class MainGui extends JFrame {
                     checkInPanel.setMyParkingLot(myParkingLot);
                     checkOutPanel.setMyParkingLot(myParkingLot);
                     viewInformationPanel.setMyParkingLot(myParkingLot);
-                    viewInformationPanel.setMyParkingLot(myParkingLot);
-                    notification.setText("Total Spaces: " + myParkingLot.getSizeSpaces() + "\nRemaining Spaces: "
+                    viewFeeStandardPanel.setMyParkingLot(myParkingLot);
+                    note.setText("Total Spaces: " + myParkingLot.getSizeSpaces() + "\nRemaining Spaces: "
                             + myParkingLot.getVacantSpacesNum() + "\nBalance: $" + myParkingLot.getBalance());
-                    // TODO:save
+
                 } catch (IOException exception) {
                     System.out.println("Unable to read from file: " + JSON_STORE);
                 } catch (ParseException exception) {
@@ -234,9 +234,9 @@ public class MainGui extends JFrame {
     }
 
     // EFFECTS: Set NimbusLookAndFeel for the frame
-    private void setNimBus() {
+    private void setLook() {
         try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+            UIManager.setLookAndFeel(com.sun.java.swing.plaf.windows.WindowsLookAndFeel.class.getName());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,8 +1,8 @@
 {
-    "balance": 384,
+    "balance": 22,
     "spaces": [
         {
-            "isVacancy": true,
+            "isVacancy": false,
             "num": 1
         },
         {
@@ -10,7 +10,7 @@
             "num": 2
         },
         {
-            "isVacancy": true,
+            "isVacancy": false,
             "num": 3
         },
         {
@@ -18,20 +18,25 @@
             "num": 4
         },
         {
-            "isVacancy": false,
+            "isVacancy": true,
             "num": 5
         }
     ],
     "vehicles": [
         {
-            "licensePlateNum": "5398Y",
-            "parkingNum": 5,
-            "startTime": "2020-10-31 00:14"
-        },
-        {
             "licensePlateNum": "G62D7",
             "parkingNum": 2,
-            "startTime": "2020-11-17 05:09"
+            "startTime": "2020-11-16 17:09"
+        },
+        {
+            "licensePlateNum": "5398Y",
+            "parkingNum": 3,
+            "startTime": "2020-11-17 06:02"
+        },
+        {
+            "licensePlateNum": "JK290",
+            "parkingNum": 1,
+            "startTime": "2020-11-17 06:02"
         }
     ]
 }

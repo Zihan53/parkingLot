@@ -19,6 +19,7 @@ public class InformationPanel extends JPanel {
 
     private ParkingLot myParkingLot;
     private JPanel customerMode;
+    private JTextArea note;
     private JPanel inputPanel;
     private JComboBox licenseChoice;
     private JPanel viewSelectButtonPanel;
@@ -30,11 +31,12 @@ public class InformationPanel extends JPanel {
     private JPanel mainMenuButtonPanel;
     private String[][] data;
 
-    public InformationPanel(ParkingLot p, JPanel customerMode) {
+    public InformationPanel(ParkingLot p, JPanel customerMode, JTextArea note) {
         super();
         setLayout(new GridLayout(3, 1));
         myParkingLot = p;
         this.customerMode = customerMode;
+        this.note = note;
 
         createInputPanel();
         createTable();
@@ -85,7 +87,7 @@ public class InformationPanel extends JPanel {
                 if (licenseChoice.getSelectedItem() != " ") {
                     try {
                         Vehicle v = myParkingLot.searchVehicle((String) licenseChoice.getSelectedItem());
-                        String[][] info = new String[10][4];
+                        String[][] info = new String[SPACES_NUM][4];
                         info[0] = new String[]{v.getLicensePlateNum(), String.valueOf(v.getSpace().getNum()),
                                 v.getDuration(new Date()), "$" + String.valueOf(v.calculateParkingFee(new Date()))};
                         DefaultTableModel select = new DefaultTableModel(info, HEADER);
@@ -108,7 +110,8 @@ public class InformationPanel extends JPanel {
                 data = new String[SPACES_NUM][4];
                 for (Vehicle vehicle : myParkingLot.getVehicles()) {
                     data[i] = new String[]{vehicle.getLicensePlateNum(), String.valueOf(vehicle.getSpace().getNum()),
-                            vehicle.getDuration(new Date()), String.valueOf(vehicle.calculateParkingFee(new Date()))};
+                            vehicle.getDuration(new Date()), "$" + String.valueOf(
+                                    vehicle.calculateParkingFee(new Date()))};
                     i++;
                 }
                 DefaultTableModel all = new DefaultTableModel(data, HEADER);
@@ -128,6 +131,8 @@ public class InformationPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CARD.show(customerMode, "Main Menu");
+                note.setText("Total Spaces: " + myParkingLot.getSizeSpaces() + "\nRemaining Spaces: "
+                        + myParkingLot.getVacantSpacesNum() + "\nBalance: $" + myParkingLot.getBalance());
                 table.setModel(new DefaultTableModel(new String[SPACES_NUM][4], HEADER));
             }
         });

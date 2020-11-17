@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import static ui.MainGui.CARD;
 
@@ -25,12 +24,14 @@ public class CheckInPanel extends JPanel {
     private JButton mainMenuButton;
     private JPanel mainMenuButtonPanel;
     private JPanel customerMode;
+    private JTextArea note;
 
-    public CheckInPanel(ParkingLot p, JPanel customerMode) {
+    public CheckInPanel(ParkingLot p, JPanel customerMode, JTextArea note) {
         super();
         setLayout(new GridLayout(4, 1));
         myParkingLot = p;
         this.customerMode = customerMode;
+        this.note = note;
 
         createInputPanel();
         createNotificationPart();
@@ -83,7 +84,6 @@ public class CheckInPanel extends JPanel {
                         myParkingLot.searchVehicle(licenseInput.getText());
                         notification.setText("The vehicle has already been in the parking lot.");
                     } catch (NoVehicleException exception) {
-                        System.out.println("qiguai");
                         addVehicle();
                     }
                 }
@@ -119,6 +119,8 @@ public class CheckInPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CARD.show(customerMode, "Main Menu");
+                note.setText("Total Spaces: " + myParkingLot.getSizeSpaces() + "\nRemaining Spaces: "
+                        + myParkingLot.getVacantSpacesNum() + "\nBalance: $" + myParkingLot.getBalance());
                 notification.setText("");
                 licenseInput.setText("");
             }

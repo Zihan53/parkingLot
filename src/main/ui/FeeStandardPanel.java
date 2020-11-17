@@ -18,12 +18,14 @@ public class FeeStandardPanel extends JPanel {
     private JPanel customerMode;
     private JButton mainMenuButton;
     private JPanel mainMenuButtonPanel;
+    private JTextArea note;
 
-    public FeeStandardPanel(ParkingLot p, JPanel customerMode) {
+    public FeeStandardPanel(ParkingLot p, JPanel customerMode, JTextArea note) {
         super();
         setLayout(new GridLayout(2, 1));
         myParkingLot = p;
         this.customerMode = customerMode;
+        this.note = note;
 
         showFeeStandard();
         createMainMenuButton();
@@ -56,6 +58,8 @@ public class FeeStandardPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CARD.show(customerMode, "Main Menu");
+                note.setText("Total Spaces: " + myParkingLot.getSizeSpaces() + "\nRemaining Spaces: "
+                        + myParkingLot.getVacantSpacesNum() + "\nBalance: $" + myParkingLot.getBalance());
             }
         });
     }

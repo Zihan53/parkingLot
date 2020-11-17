@@ -24,12 +24,14 @@ public class CheckOutPanel extends JPanel {
     private JButton mainMenuButton;
     private JPanel mainMenuButtonPanel;
     private JPanel customerMode;
+    private JTextArea note;
 
-    public CheckOutPanel(ParkingLot p, JPanel customerMode) {
+    public CheckOutPanel(ParkingLot p, JPanel customerMode, JTextArea note) {
         super();
         setLayout(new GridLayout(4, 1));
         myParkingLot = p;
         this.customerMode = customerMode;
+        this.note = note;
 
         createInputPanel();
         createNotificationPart();
@@ -94,6 +96,8 @@ public class CheckOutPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CARD.show(customerMode, "Main Menu");
+                note.setText("Total Spaces: " + myParkingLot.getSizeSpaces() + "\nRemaining Spaces: "
+                        + myParkingLot.getVacantSpacesNum() + "\nBalance: $" + myParkingLot.getBalance());
                 notification.setText("");
             }
         });
