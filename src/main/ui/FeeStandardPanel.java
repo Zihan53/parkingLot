@@ -59,4 +59,8 @@ public class FeeStandardPanel extends JPanel {
             }
         });
     }
+
+    public void setMyParkingLot(ParkingLot myParkingLot) {
+        this.myParkingLot = myParkingLot;
+    }
 }

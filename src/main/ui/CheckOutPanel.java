@@ -101,11 +101,15 @@ public class CheckOutPanel extends JPanel {
 
     // MODIFIES: this
     // EFFECTS: Set the comboBox for license choice
-    public void setLicenseChoice(ArrayList<Vehicle> vehicles) {
+    public void setLicenseChoice() {
         licenseChoice.removeAllItems();
         licenseChoice.addItem(" ");
-        for (Vehicle vehicle: vehicles) {
+        for (Vehicle vehicle: myParkingLot.getVehicles()) {
             licenseChoice.addItem(vehicle.getLicensePlateNum());
         }
+    }
+
+    public void setMyParkingLot(ParkingLot myParkingLot) {
+        this.myParkingLot = myParkingLot;
     }
 }

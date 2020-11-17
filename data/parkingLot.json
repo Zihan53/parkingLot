@@ -1,12 +1,12 @@
 {
-    "balance": 34,
+    "balance": 384,
     "spaces": [
         {
-            "isVacancy": false,
+            "isVacancy": true,
             "num": 1
         },
         {
-            "isVacancy": true,
+            "isVacancy": false,
             "num": 2
         },
         {
@@ -29,9 +29,9 @@
             "startTime": "2020-10-31 00:14"
         },
         {
-            "licensePlateNum": "UV865",
-            "parkingNum": 1,
-            "startTime": "2020-11-03 14:44"
+            "licensePlateNum": "G62D7",
+            "parkingNum": 2,
+            "startTime": "2020-11-17 05:09"
         }
     ]
 }

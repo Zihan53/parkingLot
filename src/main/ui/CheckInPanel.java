@@ -83,6 +83,7 @@ public class CheckInPanel extends JPanel {
                         myParkingLot.searchVehicle(licenseInput.getText());
                         notification.setText("The vehicle has already been in the parking lot.");
                     } catch (NoVehicleException exception) {
+                        System.out.println("qiguai");
                         addVehicle();
                     }
                 }
@@ -126,13 +127,17 @@ public class CheckInPanel extends JPanel {
 
     // MODIFIES: this
     // EFFECTS: Set the comboBox for space choice
-    public void setSpaceChoice(ArrayList<Space> spaces) {
+    public void setSpaceChoice() {
         spaceChoice.removeAllItems();
         spaceChoice.addItem(" ");
-        for (Space space : spaces) {
+        for (Space space : myParkingLot.getSpaces()) {
             if (space.getIsVacancy()) {
                 spaceChoice.addItem(space.getNum());
             }
         }
+    }
+
+    public void setMyParkingLot(ParkingLot myParkingLot) {
+        this.myParkingLot = myParkingLot;
     }
 }

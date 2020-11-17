@@ -87,7 +87,7 @@ public class InformationPanel extends JPanel {
                         Vehicle v = myParkingLot.searchVehicle((String) licenseChoice.getSelectedItem());
                         String[][] info = new String[10][4];
                         info[0] = new String[]{v.getLicensePlateNum(), String.valueOf(v.getSpace().getNum()),
-                                v.getDuration(new Date()), String.valueOf(v.calculateParkingFee(new Date()))};
+                                v.getDuration(new Date()), "$" + String.valueOf(v.calculateParkingFee(new Date()))};
                         DefaultTableModel select = new DefaultTableModel(info, HEADER);
                         table.setModel(select);
                     } catch (NoVehicleException exception) {
@@ -105,8 +105,8 @@ public class InformationPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int i = 0;
+                data = new String[SPACES_NUM][4];
                 for (Vehicle vehicle : myParkingLot.getVehicles()) {
-                    data = new String[SPACES_NUM][4];
                     data[i] = new String[]{vehicle.getLicensePlateNum(), String.valueOf(vehicle.getSpace().getNum()),
                             vehicle.getDuration(new Date()), String.valueOf(vehicle.calculateParkingFee(new Date()))};
                     i++;
@@ -141,5 +141,9 @@ public class InformationPanel extends JPanel {
         for (Vehicle vehicle : myParkingLot.getVehicles()) {
             licenseChoice.addItem(vehicle.getLicensePlateNum());
         }
+    }
+
+    public void setMyParkingLot(ParkingLot myParkingLot) {
+        this.myParkingLot = myParkingLot;
     }
 }
