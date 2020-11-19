@@ -292,4 +292,15 @@ public class ParkingLotTest {
         }
         assertEquals("NUZ678 U8C0KW UH0J77 ", parkingLot.licenseToString());
     }
+
+    @Test
+    public void testGetVacantSpacesNum() {
+        Space s1 = new Space(2);
+        Space s2 = new Space(5);
+        Space s3 = new Space(7);
+        parkingLot.addSpace(s1);
+        parkingLot.addSpace(s2);
+        parkingLot.addSpace(s3);
+        assertEquals(3, parkingLot.getVacantSpacesNum());
+    }
 }

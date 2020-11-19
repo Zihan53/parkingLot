@@ -6,16 +6,32 @@ import model.Space;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+import javax.sound.sampled.AudioSystem;
 import javax.swing.*;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 
 public class MainGui extends JFrame {
     private static final String JSON_STORE = "./data/parkingLot.json";
+    private static final String CHECK_IN_IMAGE = "./data/car-in-garage.png";
+    //<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
+    // <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    private static final String CHECK_OUT_IMAGE = "./data/check-out.png";
+    //<div>Icons made by <a href="https://www.flaticon.com/authors/icongeek26" title="Icongeek26">Icongeek26</a> from
+    //<a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    private static  final String VIEW_IMAGE = "./data/search.png";
+    //<div>Icons made by <a href="http://www.freepik.com/" title="Freepik">Freepik</a> from
+    // <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    private static  final String FEE_IMAGE = "./data/fees.png";
+    // <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from
+    // <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
     public static final int HEIGHT = 433;
     public static final int WIDTH = 700;
     public static final int xPosition = 500;
@@ -122,6 +138,7 @@ public class MainGui extends JFrame {
     // EFFECTS: Create the check in button and set the event
     private void createCheckInButton() {
         checkInButton = new JButton("Check In");
+        checkInButton.setIcon(new ImageIcon(CHECK_IN_IMAGE));
         buttonPanelOne.add(checkInButton);
         checkInButton.addActionListener(new ActionListener() {
             @Override
@@ -136,6 +153,7 @@ public class MainGui extends JFrame {
     // EFFECTS: Create the check out button and set the event
     private void createCheckOutButton() {
         checkOutButton = new JButton("Check Out");
+        checkOutButton.setIcon(new ImageIcon(CHECK_OUT_IMAGE));
         buttonPanelOne.add(checkOutButton);
         checkOutButton.addActionListener(new ActionListener() {
             @Override
@@ -150,6 +168,7 @@ public class MainGui extends JFrame {
     // EFFECTS: Create the view information button and set the event
     private void createViewInformationButton() {
         viewInformationButton = new JButton("View Vehicles");
+        viewInformationButton.setIcon(new ImageIcon(VIEW_IMAGE));
         buttonPanelOne.add(viewInformationButton);
         viewInformationButton.addActionListener(new ActionListener() {
             @Override
@@ -164,6 +183,7 @@ public class MainGui extends JFrame {
     // EFFECTS: Create the view fee standard button and set the event
     private void createViewFeeStandardButton() {
         viewFeeStandardButton = new JButton("Fee Standard");
+        viewFeeStandardButton.setIcon(new ImageIcon(FEE_IMAGE));
         buttonPanelOne.add(viewFeeStandardButton);
         viewFeeStandardButton.addActionListener(new ActionListener() {
             @Override
