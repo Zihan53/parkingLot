@@ -302,5 +302,12 @@ public class ParkingLotTest {
         parkingLot.addSpace(s2);
         parkingLot.addSpace(s3);
         assertEquals(3, parkingLot.getVacantSpacesNum());
+        Vehicle v1 = new Vehicle("NUZ678");
+        try {
+            parkingLot.addVehicle(v1, 2);
+        } catch (NoSpaceException exception) {
+            // pass
+        }
+        assertEquals(2, parkingLot.getVacantSpacesNum());
     }
 }

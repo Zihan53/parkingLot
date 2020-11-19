@@ -6,14 +6,10 @@ import model.Space;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import javax.sound.sampled.AudioSystem;
 import javax.swing.*;
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
@@ -70,7 +66,7 @@ public class MainGui extends JFrame {
         setUIFont();
 
         init();
-        createCustomerMode();
+        createCard();
 
         this.getContentPane().add(customerMode);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,8 +77,9 @@ public class MainGui extends JFrame {
     }
 
 
-    // EFFECTS: Create the main panel and show it.
-    private void createCustomerMode() {
+    // MODIFIES: this
+    // EFFECTS: Create a panel to be card layout
+    private void createCard() {
         customerMode = new JPanel();
         customerMode.setLayout(CARD);
         this.getContentPane().add(customerMode);
@@ -104,6 +101,8 @@ public class MainGui extends JFrame {
     }
 
 
+    // MODIFIES: this
+    // EFFECTS: Create all the things in the main menu
     private void initMainMenu() {
         mainMenu = new JPanel();
         mainMenu.setLayout(new GridLayout(3, 1));
