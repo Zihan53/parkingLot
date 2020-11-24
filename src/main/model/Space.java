@@ -1,9 +1,10 @@
 package model;
 
 import org.json.JSONObject;
+import persistence.Writable;
 
 // Represents a space with a number.
-public class Space {
+public class Space implements Writable {
 
     private Boolean isVacancy;
     private int num;
@@ -33,7 +34,7 @@ public class Space {
 
     // Follow the format in JsonSerializationDemo
     // EFFECTS: return this space as a JSON object
-    public JSONObject spaceToJson() {
+    public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("isVacancy", isVacancy);
         json.put("num", num);

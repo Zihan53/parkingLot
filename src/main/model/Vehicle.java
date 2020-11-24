@@ -1,12 +1,13 @@
 package model;
 
 import org.json.JSONObject;
+import persistence.Writable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 // Represents a vehicle with a license-plate number
-public class Vehicle {
+public class Vehicle implements Writable {
     public static final long NM = 1000 * 60;
     public static final int PARKING_FEE_PER_HOUR = 2;
     public static final int MAXIMUM_PARKING_FEE = 350;
@@ -69,18 +70,16 @@ public class Vehicle {
     //          Parking duration: ...days...hours...minutes
     //          Current Parking Fee: $...
     public String vehicleToString(Date now) {
-        long d = calculateParkingDuration(now);
         int pf = calculateParkingFee(now);
-        int dd = (int) (d / MINUTES_IN_HOUR / HOURS_IN_DAY);
-        int dh = (int) ((d - dd * HOURS_IN_DAY * MINUTES_IN_HOUR) / MINUTES_IN_HOUR);
-        int dm = (int) (d - dd * HOURS_IN_DAY * MINUTES_IN_HOUR - dh * MINUTES_IN_HOUR);
 
         return "License Number: " + licensePlateNum + "\n"
                 + "Space Number: " + space.getNum() + "\n"
-                + "Parking Duration: " + dd + "d-" + dh + "h-" + dm + "min\n"
-                + "Current Parking Fee: $" + pf;
+                + "Current Parking Fee: $" + pf + "\n"
+                + "Parking Duration: " + getDuration(now);
     }
 
+    // REQUIRES: This vehicle must be assigned to a space
+    // EFFECTS: Return the parking duration of the vehicle in the format ...d-...h-...min
     public String getDuration(Date now) {
         long d = calculateParkingDuration(now);
         int dd = (int) (d / MINUTES_IN_HOUR / HOURS_IN_DAY);
@@ -116,7 +115,7 @@ public class Vehicle {
 
     // Follow the format in JsonSerializationDemo
     // EFFECTS: return this vehicle as a JSON object
-    public JSONObject vehicleToJson() {
+    public JSONObject toJson() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         JSONObject json = new JSONObject();
         json.put("licensePlateNum", licensePlateNum);

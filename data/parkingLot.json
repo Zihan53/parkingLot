@@ -1,8 +1,8 @@
 {
-    "balance": 22,
+    "balance": 124,
     "spaces": [
         {
-            "isVacancy": false,
+            "isVacancy": true,
             "num": 1
         },
         {
@@ -14,7 +14,7 @@
             "num": 3
         },
         {
-            "isVacancy": true,
+            "isVacancy": false,
             "num": 4
         },
         {
@@ -34,9 +34,9 @@
             "startTime": "2020-11-17 06:02"
         },
         {
-            "licensePlateNum": "JK290",
-            "parkingNum": 1,
-            "startTime": "2020-11-17 06:02"
+            "licensePlateNum": "UIY908",
+            "parkingNum": 4,
+            "startTime": "2020-11-19 08:38"
         }
     ]
 }

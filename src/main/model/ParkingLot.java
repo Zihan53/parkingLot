@@ -4,12 +4,13 @@ import exception.NoSpaceException;
 import exception.NoVehicleException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import persistence.Writable;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 // Represents a parking lot with a list of spaces, list of vehicles and balance (in dollars)
-public class ParkingLot {
+public class ParkingLot implements Writable {
 
     private ArrayList<Space> spaces;
     private ArrayList<Vehicle> vehicles;
@@ -28,9 +29,10 @@ public class ParkingLot {
         spaces.add(s);
     }
 
-    // REQUIRES: There must be vacant space
+
     // MODIFIES: this
-    // EFFECTS: Add v to vehicles and assign the vehicle the space with number sn
+    // EFFECTS: Add v to vehicles and assign the vehicle the space with number sn, if there is no space with number sn
+    //          , throw a NoSpaceException
     public void addVehicle(Vehicle v, int sn) throws NoSpaceException {
         Space s = searchSpace(sn);
         vehicles.add(v);
@@ -39,7 +41,8 @@ public class ParkingLot {
 
     // MODIFIES: this
     // EFFECTS: Unassign the vehicle with licensePlateNumber cl and remove it from vehicles
-    //          And add the corresponding parking fee to balance
+    //          And add the corresponding parking fee to balance, if there is no vehicle with license plate number
+    //          cl, throw a NoVehicleException
     public void unassignVehicle(String cl, Date now) throws NoVehicleException {
         Vehicle v = searchVehicle(cl);
         addChargeToBalance(v, now);
@@ -47,7 +50,6 @@ public class ParkingLot {
         vehicles.remove(v);
     }
 
-    // REQUIRES: Spaces can not be empty.
     // EFFECTS: Return true if no vacant spaces left, false otherwise.
     public Boolean checkNoVacantSpace() {
         for (Space s : spaces) {
@@ -58,7 +60,6 @@ public class ParkingLot {
         return true;
     }
 
-    // REQUIRES: Vehicles can not be empty.
     // EFFECTS: Return true if all the spaces are vacant, false otherwise.
     public Boolean checkAllVacant() {
         for (Space s : spaces) {
@@ -69,6 +70,7 @@ public class ParkingLot {
         return true;
     }
 
+    // EFFECTS: Return the number of vacant spaces
     public int getVacantSpacesNum() {
         int num = 0;
         for (Space s: spaces) {
@@ -79,7 +81,7 @@ public class ParkingLot {
         return num;
     }
 
-    // EFFECTS: Return the number of vacant spaces in string.
+    // EFFECTS: Return the space num of vacant spaces in string.
     public String vacantSpacesToString() {
         StringBuilder str = new StringBuilder();
         for (Space s: spaces) {
@@ -165,7 +167,7 @@ public class ParkingLot {
 
     // Follow the format in JsonSerializationDemo
     // EFFECTS: Return parkingLot as a Json object
-    public JSONObject parkingLotToJson() {
+    public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("spaces", spacesToJson());
         json.put("vehicles", vehiclesToJson());
@@ -179,7 +181,7 @@ public class ParkingLot {
         JSONArray jsonArray = new JSONArray();
 
         for (Vehicle v : vehicles) {
-            jsonArray.put(v.vehicleToJson());
+            jsonArray.put(v.toJson());
         }
 
         return jsonArray;
@@ -191,12 +193,11 @@ public class ParkingLot {
         JSONArray jsonArray = new JSONArray();
 
         for (Space s : spaces) {
-            jsonArray.put(s.spaceToJson());
+            jsonArray.put(s.toJson());
         }
 
         return jsonArray;
     }
-
 }
 
 

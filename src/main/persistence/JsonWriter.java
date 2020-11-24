@@ -29,7 +29,7 @@ public class JsonWriter {
     // MODIFIES: this
     // EFFECTS: writes JSON representation of parkingLot to file
     public void write(ParkingLot pl) {
-        JSONObject json = pl.parkingLotToJson();
+        JSONObject json = pl.toJson();
         saveToFile(json.toString(TAB));
     }
 

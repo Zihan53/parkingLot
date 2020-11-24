@@ -20,3 +20,9 @@ whenever I want.
 - As a user, I want to be able to save the information in parkingLot in a file.
 - As a user, I want to be able to load previous parkingLot's information.
 
+## Phase 4: Task 2
+I choose to Test and design a class in the model package that is robust. The class is ParkingLot and there are four
+methods: addVehicle, unassignVehicle, searchVehicle and searchSpace. The addVehicle method calls the searchSpace method 
+and the unassignVehicle method calls the searchVehicle method.
+
+## Phase 4: Task 3

@@ -88,8 +88,8 @@ public class VehicleTest {
         now.setTime(vehicle.getStartTime().getTime() + (2 * HOURS_IN_DAY * MINUTES_IN_HOUR + 4 * MINUTES_IN_HOUR +
                 30) * MILLISECOND_IN_MINUTES);
         int pf = vehicle.calculateParkingFee(now);
-        assertEquals("License Number: U8U8U8\nSpace Number: 3\n" + "Parking Duration: 2d-4h-30min\n" +
-                "Current Parking Fee: $" + pf,vehicle.vehicleToString(now));
+        assertEquals("License Number: U8U8U8\nSpace Number: 3\n" + "Current Parking Fee: $" + pf + "\n"
+                + "Parking Duration: 2d-4h-30min",vehicle.vehicleToString(now));
     }
 
     @Test
