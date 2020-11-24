@@ -22,7 +22,13 @@ whenever I want.
 
 ## Phase 4: Task 2
 I choose to Test and design a class in the model package that is robust. The class is ParkingLot and there are four
-methods: addVehicle, unassignVehicle, searchVehicle and searchSpace. The addVehicle method calls the searchSpace method 
+methods: addVehicle, unassignVehicle, searchVehicle and searchSpace. The addVehicle method calls the searchSpace method,
 and the unassignVehicle method calls the searchVehicle method.
 
 ## Phase 4: Task 3
+- There are too many couplings among Space, Vehicle and ParkingLot class. I will keep the coupling between ParkingLot 
+and Space, Space and Vehicle, which means removing the coupling between Vehicle and ParkingLot because ParkingLot can 
+get information of vehicle through Space.
+- The four classes(CheckInPanel, CheckOutPanel, FeeStandardPanel and InformationPanel) representing panels in GUI are 
+designed individually but there are a lot of duplicate codes so I will add an abstract class and these four classes
+extend this abstract class.
