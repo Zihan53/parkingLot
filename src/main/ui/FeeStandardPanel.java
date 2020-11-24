@@ -11,6 +11,7 @@ import static model.Vehicle.*;
 import static model.Vehicle.MAXIMUM_PARKING_FEE;
 import static ui.MainGui.CARD;
 
+// Represent a panel to show the fee standard
 public class FeeStandardPanel extends JPanel {
     private JTextArea feeStandard;
     private JPanel feeStandardPanel;

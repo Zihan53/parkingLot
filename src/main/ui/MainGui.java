@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 
+// Parking Lot application with Gui
 public class MainGui extends JFrame {
     private static final String JSON_STORE = "./data/parkingLot.json";
     private static final String CHECK_IN_IMAGE = "./data/car-in-garage.png";

@@ -14,6 +14,7 @@ import java.util.Date;
 
 import static ui.MainGui.CARD;
 
+// Represent the check out panel
 public class CheckOutPanel extends JPanel {
     private ParkingLot myParkingLot;
     private JPanel inputPanel;

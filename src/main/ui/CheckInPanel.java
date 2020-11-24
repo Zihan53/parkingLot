@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 
 import static ui.MainGui.CARD;
 
+// Represent the check in panel
 public class CheckInPanel extends JPanel {
     private ParkingLot myParkingLot;
     private JPanel inputPanel;

@@ -14,6 +14,8 @@ import java.util.Date;
 import static ui.MainGui.CARD;
 import static ui.MainGui.SPACES_NUM;
 
+
+// Represent the panel to view information in the parking lot
 public class InformationPanel extends JPanel {
     public static String[] HEADER = {"Plate Number", "Space Number", "Parking Duration", "Parking Fee"};
 
