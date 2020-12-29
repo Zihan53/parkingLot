@@ -18,8 +18,6 @@ public class Space implements Writable {
         this.num = num;
     }
 
-    // MODIFIES: this
-    // EFFECTS: Set isVacancy to be iv.
     public void setIsVacancy(Boolean iv) {
         isVacancy = iv;
     }

@@ -1,5 +1,5 @@
 {
-    "balance": 124,
+    "balance": 60,
     "spaces": [
         {
             "isVacancy": true,
@@ -24,19 +24,19 @@
     ],
     "vehicles": [
         {
-            "licensePlateNum": "G62D7",
-            "parkingNum": 2,
-            "startTime": "2020-11-16 17:09"
-        },
-        {
             "licensePlateNum": "5398Y",
             "parkingNum": 3,
-            "startTime": "2020-11-17 06:02"
+            "startTime": "2020-11-24 06:02"
         },
         {
             "licensePlateNum": "UIY908",
             "parkingNum": 4,
-            "startTime": "2020-11-19 08:38"
+            "startTime": "2020-11-24 13:38"
+        },
+        {
+            "licensePlateNum": "78UIL",
+            "parkingNum": 2,
+            "startTime": "2020-11-24 14:46"
         }
     ]
 }
